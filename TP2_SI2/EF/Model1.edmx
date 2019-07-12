@@ -1,0 +1,993 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="si2.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Autor">
+          <Key>
+            <PropertyRef Name="idUtilizador" />
+          </Key>
+          <Property Name="idUtilizador" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Autor_Submissao">
+          <Key>
+            <PropertyRef Name="idUtilizador" />
+            <PropertyRef Name="idSubmissao" />
+          </Key>
+          <Property Name="idUtilizador" Type="int" Nullable="false" />
+          <Property Name="idSubmissao" Type="int" Nullable="false" />
+          <Property Name="receiveMail" Type="bit" />
+        </EntityType>
+        <EntityType Name="Conferencia">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="idPresidente" Type="int" />
+          <Property Name="notaMinima" Type="int" />
+          <Property Name="acronimo" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="nome" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ano" Type="int" Nullable="false" />
+          <Property Name="dataRealizacao" Type="datetime" Nullable="false" />
+          <Property Name="dataLimite" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Estado">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="descricao" Type="nvarchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="Ficheiro">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nome" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="extensao" Type="char" MaxLength="5" Nullable="false" />
+          <Property Name="idSubmissao" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Instituicao">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nome" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="morada" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="pais" Type="nvarchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Registo">
+          <Key>
+            <PropertyRef Name="idUtilizador" />
+            <PropertyRef Name="idConferencia" />
+          </Key>
+          <Property Name="idUtilizador" Type="int" Nullable="false" />
+          <Property Name="idConferencia" Type="int" Nullable="false" />
+          <Property Name="dataRegisto" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Revisor">
+          <Key>
+            <PropertyRef Name="idUtilizador" />
+          </Key>
+          <Property Name="idUtilizador" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Revisor_Submissao">
+          <Key>
+            <PropertyRef Name="idSubmissao" />
+            <PropertyRef Name="idRevisor" />
+          </Key>
+          <Property Name="idSubmissao" Type="int" Nullable="false" />
+          <Property Name="idRevisor" Type="int" Nullable="false" />
+          <Property Name="nota" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="texto" Type="nvarchar" MaxLength="255" />
+          <Property Name="revisto" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Submissao">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="idEstado" Type="int" Nullable="false" />
+          <Property Name="resumo" Type="nvarchar" MaxLength="50" />
+          <Property Name="dataSubmissao" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Submissao_Conferencia">
+          <Key>
+            <PropertyRef Name="idConferencia" />
+            <PropertyRef Name="idSubmissao" />
+          </Key>
+          <Property Name="idConferencia" Type="int" Nullable="false" />
+          <Property Name="idSubmissao" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Utilizador">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="mail" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="idInstituicao" Type="int" Nullable="false" />
+          <Property Name="nome" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__Autor__idUtiliza__73501C2F">
+          <End Role="Utilizador" Type="Self.Utilizador" Multiplicity="1" />
+          <End Role="Autor" Type="Self.Autor" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Utilizador">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Autor">
+              <PropertyRef Name="idUtilizador" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Autor_Sub__idSub__075714DC">
+          <End Role="Submissao" Type="Self.Submissao" Multiplicity="1" />
+          <End Role="Autor_Submissao" Type="Self.Autor_Submissao" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Submissao">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Autor_Submissao">
+              <PropertyRef Name="idSubmissao" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Autor_Sub__idUti__0662F0A3">
+          <End Role="Autor" Type="Self.Autor" Multiplicity="1" />
+          <End Role="Autor_Submissao" Type="Self.Autor_Submissao" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Autor">
+              <PropertyRef Name="idUtilizador" />
+            </Principal>
+            <Dependent Role="Autor_Submissao">
+              <PropertyRef Name="idUtilizador" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Conferenc__idPre__6ABAD62E">
+          <End Role="Utilizador" Type="Self.Utilizador" Multiplicity="0..1" />
+          <End Role="Conferencia" Type="Self.Conferencia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Utilizador">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Conferencia">
+              <PropertyRef Name="idPresidente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Ficheiro__idSubm__7720AD13">
+          <End Role="Submissao" Type="Self.Submissao" Multiplicity="1" />
+          <End Role="Ficheiro" Type="Self.Ficheiro" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Submissao">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Ficheiro">
+              <PropertyRef Name="idSubmissao" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Registo__idConfe__02925FBF">
+          <End Role="Conferencia" Type="Self.Conferencia" Multiplicity="1" />
+          <End Role="Registo" Type="Self.Registo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Conferencia">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Registo">
+              <PropertyRef Name="idConferencia" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Registo__idUtili__038683F8">
+          <End Role="Utilizador" Type="Self.Utilizador" Multiplicity="1" />
+          <End Role="Registo" Type="Self.Registo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Utilizador">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Registo">
+              <PropertyRef Name="idUtilizador" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Revisor__idUtili__7073AF84">
+          <End Role="Utilizador" Type="Self.Utilizador" Multiplicity="1" />
+          <End Role="Revisor" Type="Self.Revisor" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Utilizador">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Revisor">
+              <PropertyRef Name="idUtilizador" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Revisor_S__idRev__7FB5F314">
+          <End Role="Revisor" Type="Self.Revisor" Multiplicity="1" />
+          <End Role="Revisor_Submissao" Type="Self.Revisor_Submissao" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Revisor">
+              <PropertyRef Name="idUtilizador" />
+            </Principal>
+            <Dependent Role="Revisor_Submissao">
+              <PropertyRef Name="idRevisor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Revisor_S__idSub__7EC1CEDB">
+          <End Role="Submissao" Type="Self.Submissao" Multiplicity="1" />
+          <End Role="Revisor_Submissao" Type="Self.Revisor_Submissao" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Submissao">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Revisor_Submissao">
+              <PropertyRef Name="idSubmissao" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Submissao__idCon__79FD19BE">
+          <End Role="Conferencia" Type="Self.Conferencia" Multiplicity="1" />
+          <End Role="Submissao_Conferencia" Type="Self.Submissao_Conferencia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Conferencia">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Submissao_Conferencia">
+              <PropertyRef Name="idConferencia" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Submissao__idEst__6D9742D9">
+          <End Role="Estado" Type="Self.Estado" Multiplicity="1" />
+          <End Role="Submissao" Type="Self.Submissao" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Estado">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Submissao">
+              <PropertyRef Name="idEstado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Submissao__idSub__7AF13DF7">
+          <End Role="Submissao" Type="Self.Submissao" Multiplicity="1" />
+          <End Role="Submissao_Conferencia" Type="Self.Submissao_Conferencia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Submissao">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Submissao_Conferencia">
+              <PropertyRef Name="idSubmissao" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Utilizado__idIns__65F62111">
+          <End Role="Instituicao" Type="Self.Instituicao" Multiplicity="1" />
+          <End Role="Utilizador" Type="Self.Utilizador" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Instituicao">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Utilizador">
+              <PropertyRef Name="idInstituicao" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="assignReviewerToReview" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="si2">
+          <Parameter Name="idRevisor" Type="int" Mode="In" />
+          <Parameter Name="idSubmissao" Type="int" Mode="In" />
+        </Function>
+        <Function Name="assignReviewerToReviewTest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="si2" />
+        <Function Name="calculateAcceptedSubmissions" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="si2" ReturnType="decimal" />
+        <Function Name="calculateAcceptedSubmissionsTest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="si2" />
+        <Function Name="deleteSubmission" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="si2">
+          <Parameter Name="idSubmission" Type="int" Mode="In" />
+          <Parameter Name="idConf" Type="int" Mode="In" />
+        </Function>
+        <Function Name="deleteSubmissionTest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="si2" />
+        <Function Name="deleteUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="si2">
+          <Parameter Name="idUser" Type="int" Mode="In" />
+        </Function>
+        <Function Name="deleteUserTest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="si2" />
+        <Function Name="insertSubmission" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="si2">
+          <Parameter Name="resumo" Type="nvarchar" Mode="In" />
+          <Parameter Name="idAuthor" Type="int" Mode="In" />
+          <Parameter Name="idSub" Type="int" Mode="In" />
+          <Parameter Name="idConf" Type="int" Mode="In" />
+          <Parameter Name="idSubmissao" Type="int" Mode="InOut" />
+        </Function>
+        <Function Name="insertSubmissionTest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="si2" />
+        <Function Name="insertUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="si2">
+          <Parameter Name="mail" Type="varchar" Mode="In" />
+          <Parameter Name="idInstituicao" Type="int" Mode="In" />
+          <Parameter Name="nome" Type="nvarchar" Mode="In" />
+          <Parameter Name="idUtilizador" Type="int" Mode="InOut" />
+        </Function>
+        <Function Name="insertUserTest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="si2" />
+        <Function Name="listReviwers" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="si2">
+          <Parameter Name="idSubmissao" Type="int" Mode="In" />
+          <Parameter Name="idConf" Type="int" Mode="In" />
+          <ReturnType>
+            <CollectionType>
+              <RowType>
+                <Property Name="id" Type="int" Nullable="false" />
+              </RowType>
+            </CollectionType>
+          </ReturnType>
+        </Function>
+        <Function Name="listReviwersTest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="si2" />
+        <Function Name="registerReview" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="si2">
+          <Parameter Name="idSubmissao" Type="int" Mode="In" />
+          <Parameter Name="nota" Type="decimal" Mode="In" />
+          <Parameter Name="texto" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="registerReviewTest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="si2" />
+        <Function Name="updateConference" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="si2">
+          <Parameter Name="idConferencia" Type="int" Mode="In" />
+          <Parameter Name="nome" Type="nvarchar" Mode="In" />
+          <Parameter Name="ano" Type="int" Mode="In" />
+          <Parameter Name="PresidenteMail" Type="varchar" Mode="In" />
+          <Parameter Name="dataLimite" Type="date" Mode="In" />
+          <Parameter Name="notaMinima" Type="int" Mode="In" />
+        </Function>
+        <Function Name="updateConferenceTest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="si2" />
+        <Function Name="updateSubmission" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="si2">
+          <Parameter Name="idSubmission" Type="int" Mode="In" />
+          <Parameter Name="estado" Type="nvarchar" Mode="In" />
+          <Parameter Name="resumo" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="updateSubmissionsState" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="si2">
+          <Parameter Name="limiteCorte" Type="int" Mode="In" />
+          <Parameter Name="idConf" Type="int" Mode="In" />
+        </Function>
+        <Function Name="updateSubmissionsStateTest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="si2" />
+        <Function Name="updateSubmissionTest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="si2" />
+        <Function Name="updateUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="si2">
+          <Parameter Name="mail" Type="varchar" Mode="In" />
+          <Parameter Name="idInst" Type="int" Mode="In" />
+          <Parameter Name="nome" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="updateUserRole" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="si2">
+          <Parameter Name="idUser" Type="int" Mode="In" />
+          <Parameter Name="idConf" Type="int" Mode="In" />
+        </Function>
+        <Function Name="updateUserRoleTest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="si2" />
+        <Function Name="updateUserTest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="si2" />
+        <EntityContainer Name="si2StoreContainer">
+          <EntitySet Name="Autor" EntityType="Self.Autor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Autor_Submissao" EntityType="Self.Autor_Submissao" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Conferencia" EntityType="Self.Conferencia" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Estado" EntityType="Self.Estado" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Ficheiro" EntityType="Self.Ficheiro" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Instituicao" EntityType="Self.Instituicao" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Registo" EntityType="Self.Registo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Revisor" EntityType="Self.Revisor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Revisor_Submissao" EntityType="Self.Revisor_Submissao" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Submissao" EntityType="Self.Submissao" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Submissao_Conferencia" EntityType="Self.Submissao_Conferencia" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Utilizador" EntityType="Self.Utilizador" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Autor__idUtiliza__73501C2F" Association="Self.FK__Autor__idUtiliza__73501C2F">
+            <End Role="Utilizador" EntitySet="Utilizador" />
+            <End Role="Autor" EntitySet="Autor" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Autor_Sub__idSub__075714DC" Association="Self.FK__Autor_Sub__idSub__075714DC">
+            <End Role="Submissao" EntitySet="Submissao" />
+            <End Role="Autor_Submissao" EntitySet="Autor_Submissao" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Autor_Sub__idUti__0662F0A3" Association="Self.FK__Autor_Sub__idUti__0662F0A3">
+            <End Role="Autor" EntitySet="Autor" />
+            <End Role="Autor_Submissao" EntitySet="Autor_Submissao" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Conferenc__idPre__6ABAD62E" Association="Self.FK__Conferenc__idPre__6ABAD62E">
+            <End Role="Utilizador" EntitySet="Utilizador" />
+            <End Role="Conferencia" EntitySet="Conferencia" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Ficheiro__idSubm__7720AD13" Association="Self.FK__Ficheiro__idSubm__7720AD13">
+            <End Role="Submissao" EntitySet="Submissao" />
+            <End Role="Ficheiro" EntitySet="Ficheiro" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Registo__idConfe__02925FBF" Association="Self.FK__Registo__idConfe__02925FBF">
+            <End Role="Conferencia" EntitySet="Conferencia" />
+            <End Role="Registo" EntitySet="Registo" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Registo__idUtili__038683F8" Association="Self.FK__Registo__idUtili__038683F8">
+            <End Role="Utilizador" EntitySet="Utilizador" />
+            <End Role="Registo" EntitySet="Registo" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Revisor__idUtili__7073AF84" Association="Self.FK__Revisor__idUtili__7073AF84">
+            <End Role="Utilizador" EntitySet="Utilizador" />
+            <End Role="Revisor" EntitySet="Revisor" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Revisor_S__idRev__7FB5F314" Association="Self.FK__Revisor_S__idRev__7FB5F314">
+            <End Role="Revisor" EntitySet="Revisor" />
+            <End Role="Revisor_Submissao" EntitySet="Revisor_Submissao" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Revisor_S__idSub__7EC1CEDB" Association="Self.FK__Revisor_S__idSub__7EC1CEDB">
+            <End Role="Submissao" EntitySet="Submissao" />
+            <End Role="Revisor_Submissao" EntitySet="Revisor_Submissao" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Submissao__idCon__79FD19BE" Association="Self.FK__Submissao__idCon__79FD19BE">
+            <End Role="Conferencia" EntitySet="Conferencia" />
+            <End Role="Submissao_Conferencia" EntitySet="Submissao_Conferencia" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Submissao__idEst__6D9742D9" Association="Self.FK__Submissao__idEst__6D9742D9">
+            <End Role="Estado" EntitySet="Estado" />
+            <End Role="Submissao" EntitySet="Submissao" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Submissao__idSub__7AF13DF7" Association="Self.FK__Submissao__idSub__7AF13DF7">
+            <End Role="Submissao" EntitySet="Submissao" />
+            <End Role="Submissao_Conferencia" EntitySet="Submissao_Conferencia" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Utilizado__idIns__65F62111" Association="Self.FK__Utilizado__idIns__65F62111">
+            <End Role="Instituicao" EntitySet="Instituicao" />
+            <End Role="Utilizador" EntitySet="Utilizador" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="si2" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <ComplexType Name="listReviwers_Result">
+          <Property Name="id" Type="Int32" Nullable="false" />
+        </ComplexType>
+        <EntityType Name="Autor">
+          <Key>
+            <PropertyRef Name="idUtilizador" />
+          </Key>
+          <Property Name="idUtilizador" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Utilizador" Relationship="Self.FK__Autor__idUtiliza__24927208" FromRole="Autor" ToRole="Utilizador" />
+          <NavigationProperty Name="Autor_Submissao" Relationship="Self.FK__Autor_Sub__idUti__37A5467C" FromRole="Autor" ToRole="Autor_Submissao" />
+        </EntityType>
+        <EntityType Name="Autor_Submissao">
+          <Key>
+            <PropertyRef Name="idUtilizador" />
+            <PropertyRef Name="idSubmissao" />
+          </Key>
+          <Property Name="idUtilizador" Type="Int32" Nullable="false" />
+          <Property Name="idSubmissao" Type="Int32" Nullable="false" />
+          <Property Name="receiveMail" Type="Boolean" />
+          <NavigationProperty Name="Autor" Relationship="Self.FK__Autor_Sub__idUti__37A5467C" FromRole="Autor_Submissao" ToRole="Autor" />
+          <NavigationProperty Name="Submissao" Relationship="Self.FK__Autor_Sub__idSub__38996AB5" FromRole="Autor_Submissao" ToRole="Submissao" />
+        </EntityType>
+        <EntityType Name="Conferencia">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idPresidente" Type="Int32" />
+          <Property Name="notaMinima" Type="Int32" />
+          <Property Name="acronimo" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="nome" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ano" Type="Int32" Nullable="false" />
+          <Property Name="dataRealizacao" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="dataLimite" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Utilizador" Relationship="Self.FK__Conferenc__idPre__1BFD2C07" FromRole="Conferencia" ToRole="Utilizador" />
+          <NavigationProperty Name="Registo" Relationship="Self.FK__Registo__idConfe__33D4B598" FromRole="Conferencia" ToRole="Registo" />
+          <NavigationProperty Name="Submissao" Relationship="Self.Submissao_Conferencia" FromRole="Conferencia" ToRole="Submissao" />
+        </EntityType>
+        <EntityType Name="Estado">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="descricao" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Submissao" Relationship="Self.FK__Submissao__idEst__1ED998B2" FromRole="Estado" ToRole="Submissao" />
+        </EntityType>
+        <EntityType Name="Ficheiro">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nome" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="extensao" Type="String" MaxLength="5" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="idSubmissao" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Submissao" Relationship="Self.FK__Ficheiro__idSubm__286302EC" FromRole="Ficheiro" ToRole="Submissao" />
+        </EntityType>
+        <EntityType Name="Instituicao">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nome" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="morada" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="pais" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Utilizador" Relationship="Self.FK__Utilizado__idIns__173876EA" FromRole="Instituicao" ToRole="Utilizador" />
+        </EntityType>
+        <EntityType Name="Registo">
+          <Key>
+            <PropertyRef Name="idUtilizador" />
+            <PropertyRef Name="idConferencia" />
+          </Key>
+          <Property Name="idUtilizador" Type="Int32" Nullable="false" />
+          <Property Name="idConferencia" Type="Int32" Nullable="false" />
+          <Property Name="dataRegisto" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Conferencia" Relationship="Self.FK__Registo__idConfe__33D4B598" FromRole="Registo" ToRole="Conferencia" />
+          <NavigationProperty Name="Utilizador" Relationship="Self.FK__Registo__idUtili__34C8D9D1" FromRole="Registo" ToRole="Utilizador" />
+        </EntityType>
+        <EntityType Name="Revisor">
+          <Key>
+            <PropertyRef Name="idUtilizador" />
+          </Key>
+          <Property Name="idUtilizador" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Utilizador" Relationship="Self.FK__Revisor__idUtili__21B6055D" FromRole="Revisor" ToRole="Utilizador" />
+          <NavigationProperty Name="Revisor_Submissao" Relationship="Self.FK__Revisor_S__idRev__30F848ED" FromRole="Revisor" ToRole="Revisor_Submissao" />
+        </EntityType>
+        <EntityType Name="Revisor_Submissao">
+          <Key>
+            <PropertyRef Name="idSubmissao" />
+            <PropertyRef Name="idRevisor" />
+          </Key>
+          <Property Name="idSubmissao" Type="Int32" Nullable="false" />
+          <Property Name="idRevisor" Type="Int32" Nullable="false" />
+          <Property Name="nota" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="texto" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="revisto" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Revisor" Relationship="Self.FK__Revisor_S__idRev__30F848ED" FromRole="Revisor_Submissao" ToRole="Revisor" />
+          <NavigationProperty Name="Submissao" Relationship="Self.FK__Revisor_S__idSub__300424B4" FromRole="Revisor_Submissao" ToRole="Submissao" />
+        </EntityType>
+        <EntityType Name="Submissao">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idEstado" Type="Int32" Nullable="false" />
+          <Property Name="resumo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="dataSubmissao" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Autor_Submissao" Relationship="Self.FK__Autor_Sub__idSub__38996AB5" FromRole="Submissao" ToRole="Autor_Submissao" />
+          <NavigationProperty Name="Estado" Relationship="Self.FK__Submissao__idEst__1ED998B2" FromRole="Submissao" ToRole="Estado" />
+          <NavigationProperty Name="Ficheiro" Relationship="Self.FK__Ficheiro__idSubm__286302EC" FromRole="Submissao" ToRole="Ficheiro" />
+          <NavigationProperty Name="Revisor_Submissao" Relationship="Self.FK__Revisor_S__idSub__300424B4" FromRole="Submissao" ToRole="Revisor_Submissao" />
+          <NavigationProperty Name="Conferencia" Relationship="Self.Submissao_Conferencia" FromRole="Submissao" ToRole="Conferencia" />
+        </EntityType>
+        <EntityType Name="Utilizador">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="mail" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="idInstituicao" Type="Int32" Nullable="false" />
+          <Property Name="nome" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Autor" Relationship="Self.FK__Autor__idUtiliza__24927208" FromRole="Utilizador" ToRole="Autor" />
+          <NavigationProperty Name="Conferencia" Relationship="Self.FK__Conferenc__idPre__1BFD2C07" FromRole="Utilizador" ToRole="Conferencia" />
+          <NavigationProperty Name="Instituicao" Relationship="Self.FK__Utilizado__idIns__173876EA" FromRole="Utilizador" ToRole="Instituicao" />
+          <NavigationProperty Name="Registo" Relationship="Self.FK__Registo__idUtili__34C8D9D1" FromRole="Utilizador" ToRole="Registo" />
+          <NavigationProperty Name="Revisor" Relationship="Self.FK__Revisor__idUtili__21B6055D" FromRole="Utilizador" ToRole="Revisor" />
+        </EntityType>
+        <Association Name="FK__Autor__idUtiliza__24927208">
+          <End Role="Utilizador" Type="Self.Utilizador" Multiplicity="1" />
+          <End Role="Autor" Type="Self.Autor" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Utilizador">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Autor">
+              <PropertyRef Name="idUtilizador" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Autor_Sub__idUti__37A5467C">
+          <End Role="Autor" Type="Self.Autor" Multiplicity="1" />
+          <End Role="Autor_Submissao" Type="Self.Autor_Submissao" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Autor">
+              <PropertyRef Name="idUtilizador" />
+            </Principal>
+            <Dependent Role="Autor_Submissao">
+              <PropertyRef Name="idUtilizador" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Autor_Sub__idSub__38996AB5">
+          <End Role="Submissao" Type="Self.Submissao" Multiplicity="1" />
+          <End Role="Autor_Submissao" Type="Self.Autor_Submissao" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Submissao">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Autor_Submissao">
+              <PropertyRef Name="idSubmissao" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Conferenc__idPre__1BFD2C07">
+          <End Role="Utilizador" Type="Self.Utilizador" Multiplicity="0..1" />
+          <End Role="Conferencia" Type="Self.Conferencia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Utilizador">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Conferencia">
+              <PropertyRef Name="idPresidente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Registo__idConfe__33D4B598">
+          <End Role="Conferencia" Type="Self.Conferencia" Multiplicity="1" />
+          <End Role="Registo" Type="Self.Registo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Conferencia">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Registo">
+              <PropertyRef Name="idConferencia" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Submissao__idEst__1ED998B2">
+          <End Role="Estado" Type="Self.Estado" Multiplicity="1" />
+          <End Role="Submissao" Type="Self.Submissao" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Estado">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Submissao">
+              <PropertyRef Name="idEstado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Ficheiro__idSubm__286302EC">
+          <End Role="Submissao" Type="Self.Submissao" Multiplicity="1" />
+          <End Role="Ficheiro" Type="Self.Ficheiro" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Submissao">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Ficheiro">
+              <PropertyRef Name="idSubmissao" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Utilizado__idIns__173876EA">
+          <End Role="Instituicao" Type="Self.Instituicao" Multiplicity="1" />
+          <End Role="Utilizador" Type="Self.Utilizador" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Instituicao">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Utilizador">
+              <PropertyRef Name="idInstituicao" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Registo__idUtili__34C8D9D1">
+          <End Role="Utilizador" Type="Self.Utilizador" Multiplicity="1" />
+          <End Role="Registo" Type="Self.Registo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Utilizador">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Registo">
+              <PropertyRef Name="idUtilizador" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Revisor__idUtili__21B6055D">
+          <End Role="Utilizador" Type="Self.Utilizador" Multiplicity="1" />
+          <End Role="Revisor" Type="Self.Revisor" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Utilizador">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Revisor">
+              <PropertyRef Name="idUtilizador" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Revisor_S__idRev__30F848ED">
+          <End Role="Revisor" Type="Self.Revisor" Multiplicity="1" />
+          <End Role="Revisor_Submissao" Type="Self.Revisor_Submissao" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Revisor">
+              <PropertyRef Name="idUtilizador" />
+            </Principal>
+            <Dependent Role="Revisor_Submissao">
+              <PropertyRef Name="idRevisor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Revisor_S__idSub__300424B4">
+          <End Role="Submissao" Type="Self.Submissao" Multiplicity="1" />
+          <End Role="Revisor_Submissao" Type="Self.Revisor_Submissao" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Submissao">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Revisor_Submissao">
+              <PropertyRef Name="idSubmissao" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Submissao_Conferencia">
+          <End Role="Conferencia" Type="Self.Conferencia" Multiplicity="*" />
+          <End Role="Submissao" Type="Self.Submissao" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="si2Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Autor" EntityType="Self.Autor" />
+          <EntitySet Name="Autor_Submissao" EntityType="Self.Autor_Submissao" />
+          <EntitySet Name="Conferencia" EntityType="Self.Conferencia" />
+          <EntitySet Name="Estado" EntityType="Self.Estado" />
+          <EntitySet Name="Ficheiro" EntityType="Self.Ficheiro" />
+          <EntitySet Name="Instituicao" EntityType="Self.Instituicao" />
+          <EntitySet Name="Registo" EntityType="Self.Registo" />
+          <EntitySet Name="Revisor" EntityType="Self.Revisor" />
+          <EntitySet Name="Revisor_Submissao" EntityType="Self.Revisor_Submissao" />
+          <EntitySet Name="Submissao" EntityType="Self.Submissao" />
+          <EntitySet Name="Utilizador" EntityType="Self.Utilizador" />
+          <AssociationSet Name="FK__Autor__idUtiliza__24927208" Association="Self.FK__Autor__idUtiliza__24927208">
+            <End Role="Utilizador" EntitySet="Utilizador" />
+            <End Role="Autor" EntitySet="Autor" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Autor_Sub__idUti__37A5467C" Association="Self.FK__Autor_Sub__idUti__37A5467C">
+            <End Role="Autor" EntitySet="Autor" />
+            <End Role="Autor_Submissao" EntitySet="Autor_Submissao" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Autor_Sub__idSub__38996AB5" Association="Self.FK__Autor_Sub__idSub__38996AB5">
+            <End Role="Submissao" EntitySet="Submissao" />
+            <End Role="Autor_Submissao" EntitySet="Autor_Submissao" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Conferenc__idPre__1BFD2C07" Association="Self.FK__Conferenc__idPre__1BFD2C07">
+            <End Role="Utilizador" EntitySet="Utilizador" />
+            <End Role="Conferencia" EntitySet="Conferencia" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Registo__idConfe__33D4B598" Association="Self.FK__Registo__idConfe__33D4B598">
+            <End Role="Conferencia" EntitySet="Conferencia" />
+            <End Role="Registo" EntitySet="Registo" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Submissao__idEst__1ED998B2" Association="Self.FK__Submissao__idEst__1ED998B2">
+            <End Role="Estado" EntitySet="Estado" />
+            <End Role="Submissao" EntitySet="Submissao" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Ficheiro__idSubm__286302EC" Association="Self.FK__Ficheiro__idSubm__286302EC">
+            <End Role="Submissao" EntitySet="Submissao" />
+            <End Role="Ficheiro" EntitySet="Ficheiro" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Utilizado__idIns__173876EA" Association="Self.FK__Utilizado__idIns__173876EA">
+            <End Role="Instituicao" EntitySet="Instituicao" />
+            <End Role="Utilizador" EntitySet="Utilizador" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Registo__idUtili__34C8D9D1" Association="Self.FK__Registo__idUtili__34C8D9D1">
+            <End Role="Utilizador" EntitySet="Utilizador" />
+            <End Role="Registo" EntitySet="Registo" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Revisor__idUtili__21B6055D" Association="Self.FK__Revisor__idUtili__21B6055D">
+            <End Role="Utilizador" EntitySet="Utilizador" />
+            <End Role="Revisor" EntitySet="Revisor" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Revisor_S__idRev__30F848ED" Association="Self.FK__Revisor_S__idRev__30F848ED">
+            <End Role="Revisor" EntitySet="Revisor" />
+            <End Role="Revisor_Submissao" EntitySet="Revisor_Submissao" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Revisor_S__idSub__300424B4" Association="Self.FK__Revisor_S__idSub__300424B4">
+            <End Role="Submissao" EntitySet="Submissao" />
+            <End Role="Revisor_Submissao" EntitySet="Revisor_Submissao" />
+          </AssociationSet>
+          <AssociationSet Name="Submissao_Conferencia" Association="Self.Submissao_Conferencia">
+            <End Role="Conferencia" EntitySet="Conferencia" />
+            <End Role="Submissao" EntitySet="Submissao" />
+          </AssociationSet>
+          <FunctionImport Name="listReviwers" IsComposable="true" ReturnType="Collection(si2.listReviwers_Result)">
+            <Parameter Name="idSubmissao" Mode="In" Type="Int32" />
+            <Parameter Name="idConf" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="assignReviewerToReview">
+            <Parameter Name="idRevisor" Mode="In" Type="Int32" />
+            <Parameter Name="idSubmissao" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="deleteSubmission">
+            <Parameter Name="idSubmission" Mode="In" Type="Int32" />
+            <Parameter Name="idConf" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="deleteUser">
+          <Parameter Name="idUser" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="insertSubmission">
+            <Parameter Name="resumo" Mode="In" Type="String" />
+            <Parameter Name="idAuthor" Mode="In" Type="Int32" />
+            <Parameter Name="idSub" Mode="In" Type="Int32" />
+            <Parameter Name="idConf" Mode="In" Type="Int32" />
+            <Parameter Name="idSubmissao" Mode="InOut" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="insertUser">
+            <Parameter Name="mail" Mode="In" Type="String" />
+            <Parameter Name="idInstituicao" Mode="In" Type="Int32" />
+            <Parameter Name="nome" Mode="In" Type="String" />
+            <Parameter Name="idUtilizador" Mode="InOut" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="registerReview">
+            <Parameter Name="idSubmissao" Mode="In" Type="Int32" />
+            <Parameter Name="nota" Mode="In" Type="Decimal" />
+            <Parameter Name="texto" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="updateConference">
+            <Parameter Name="idConferencia" Mode="In" Type="Int32" />
+            <Parameter Name="nome" Mode="In" Type="String" />
+            <Parameter Name="ano" Mode="In" Type="Int32" />
+            <Parameter Name="PresidenteMail" Mode="In" Type="String" />
+            <Parameter Name="dataLimite" Mode="In" Type="DateTime" />
+            <Parameter Name="notaMinima" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="updateSubmission">
+            <Parameter Name="idSubmission" Mode="In" Type="Int32" />
+            <Parameter Name="estado" Mode="In" Type="String" />
+            <Parameter Name="resumo" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="updateSubmissionsState">
+            <Parameter Name="limiteCorte" Mode="In" Type="Int32" />
+            <Parameter Name="idConf" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="updateUser">
+            <Parameter Name="mail" Mode="In" Type="String" />
+            <Parameter Name="idInst" Mode="In" Type="Int32" />
+            <Parameter Name="nome" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="updateUserRole">
+            <Parameter Name="idUser" Mode="In" Type="Int32" />
+            <Parameter Name="idConf" Mode="In" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="si2StoreContainer" CdmEntityContainer="si2Entities">
+          <EntitySetMapping Name="Autor">
+            <EntityTypeMapping TypeName="si2.Autor">
+              <MappingFragment StoreEntitySet="Autor">
+                <ScalarProperty Name="idUtilizador" ColumnName="idUtilizador" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Autor_Submissao">
+            <EntityTypeMapping TypeName="si2.Autor_Submissao">
+              <MappingFragment StoreEntitySet="Autor_Submissao">
+                <ScalarProperty Name="idUtilizador" ColumnName="idUtilizador" />
+                <ScalarProperty Name="idSubmissao" ColumnName="idSubmissao" />
+                <ScalarProperty Name="receiveMail" ColumnName="receiveMail" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Conferencia">
+            <EntityTypeMapping TypeName="si2.Conferencia">
+              <MappingFragment StoreEntitySet="Conferencia">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="idPresidente" ColumnName="idPresidente" />
+                <ScalarProperty Name="notaMinima" ColumnName="notaMinima" />
+                <ScalarProperty Name="acronimo" ColumnName="acronimo" />
+                <ScalarProperty Name="nome" ColumnName="nome" />
+                <ScalarProperty Name="ano" ColumnName="ano" />
+                <ScalarProperty Name="dataRealizacao" ColumnName="dataRealizacao" />
+                <ScalarProperty Name="dataLimite" ColumnName="dataLimite" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Estado">
+            <EntityTypeMapping TypeName="si2.Estado">
+              <MappingFragment StoreEntitySet="Estado">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="descricao" ColumnName="descricao" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Ficheiro">
+            <EntityTypeMapping TypeName="si2.Ficheiro">
+              <MappingFragment StoreEntitySet="Ficheiro">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="nome" ColumnName="nome" />
+                <ScalarProperty Name="extensao" ColumnName="extensao" />
+                <ScalarProperty Name="idSubmissao" ColumnName="idSubmissao" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Instituicao">
+            <EntityTypeMapping TypeName="si2.Instituicao">
+              <MappingFragment StoreEntitySet="Instituicao">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="nome" ColumnName="nome" />
+                <ScalarProperty Name="morada" ColumnName="morada" />
+                <ScalarProperty Name="pais" ColumnName="pais" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Registo">
+            <EntityTypeMapping TypeName="si2.Registo">
+              <MappingFragment StoreEntitySet="Registo">
+                <ScalarProperty Name="idUtilizador" ColumnName="idUtilizador" />
+                <ScalarProperty Name="idConferencia" ColumnName="idConferencia" />
+                <ScalarProperty Name="dataRegisto" ColumnName="dataRegisto" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Revisor">
+            <EntityTypeMapping TypeName="si2.Revisor">
+              <MappingFragment StoreEntitySet="Revisor">
+                <ScalarProperty Name="idUtilizador" ColumnName="idUtilizador" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Revisor_Submissao">
+            <EntityTypeMapping TypeName="si2.Revisor_Submissao">
+              <MappingFragment StoreEntitySet="Revisor_Submissao">
+                <ScalarProperty Name="idSubmissao" ColumnName="idSubmissao" />
+                <ScalarProperty Name="idRevisor" ColumnName="idRevisor" />
+                <ScalarProperty Name="nota" ColumnName="nota" />
+                <ScalarProperty Name="texto" ColumnName="texto" />
+                <ScalarProperty Name="revisto" ColumnName="revisto" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Submissao">
+            <EntityTypeMapping TypeName="si2.Submissao">
+              <MappingFragment StoreEntitySet="Submissao">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="idEstado" ColumnName="idEstado" />
+                <ScalarProperty Name="resumo" ColumnName="resumo" />
+                <ScalarProperty Name="dataSubmissao" ColumnName="dataSubmissao" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Utilizador">
+            <EntityTypeMapping TypeName="si2.Utilizador">
+              <MappingFragment StoreEntitySet="Utilizador">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="mail" ColumnName="mail" />
+                <ScalarProperty Name="idInstituicao" ColumnName="idInstituicao" />
+                <ScalarProperty Name="nome" ColumnName="nome" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="Submissao_Conferencia" TypeName="si2.Submissao_Conferencia" StoreEntitySet="Submissao_Conferencia">
+            <EndProperty Name="Conferencia">
+              <ScalarProperty Name="id" ColumnName="idConferencia" />
+            </EndProperty>
+            <EndProperty Name="Submissao">
+              <ScalarProperty Name="id" ColumnName="idSubmissao" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <FunctionImportMapping FunctionName="si2.Store.listReviwers" FunctionImportName="listReviwers">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="si2.listReviwers_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="assignReviewerToReview" FunctionName="si2.Store.assignReviewerToReview" />
+          <FunctionImportMapping FunctionImportName="deleteSubmission" FunctionName="si2.Store.deleteSubmission" />
+          <FunctionImportMapping FunctionImportName="deleteUser" FunctionName="si2.Store.deleteUser" />
+          <FunctionImportMapping FunctionImportName="insertSubmission" FunctionName="si2.Store.insertSubmission" />
+          <FunctionImportMapping FunctionImportName="insertUser" FunctionName="si2.Store.insertUser" />
+          <FunctionImportMapping FunctionImportName="registerReview" FunctionName="si2.Store.registerReview" />
+          <FunctionImportMapping FunctionImportName="updateConference" FunctionName="si2.Store.updateConference" />
+          <FunctionImportMapping FunctionImportName="updateSubmission" FunctionName="si2.Store.updateSubmission" />
+          <FunctionImportMapping FunctionImportName="updateSubmissionsState" FunctionName="si2.Store.updateSubmissionsState" />
+          <FunctionImportMapping FunctionImportName="updateUser" FunctionName="si2.Store.updateUser" />
+          <FunctionImportMapping FunctionImportName="updateUserRole" FunctionName="si2.Store.updateUserRole" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

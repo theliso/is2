@@ -1,0 +1,44 @@
+Instituição(nome, morada, país)
+AK = nome
+
+Utilizador(nome, e-mail, nome(Instituição))
+AK = e-mail
+FK = nome REF Instituição
+
+Conferência(nome, acrónimo, ano de realização, data de realização)
+AK = nome, ano de realização
+
+Autor(e-mail)
+AK = e-mail
+FK = e-mail REF Utilizador
+
+Revisor(e-mail)
+AK = e-mail
+FK = e-mail REF Utilizador
+
+Submissão(id, data de submissão, resumo)
+AK = id
+
+Estado(id[AK], descrição, id(Submissão))
+AK = id
+FK = id REF Submissão
+
+Ficheiro(nome, extensao, id(Submissão)
+AK = nome
+FK = id REF Submissão
+
+Utilizador_Conferência(e-mail, nome, ano de realização, data de registo)
+AK = e-mail, nome, ano de realização
+FK = e-mail REF Utilizador, nome REF Conferência, ano de realização REF Conferência
+
+Revisor_Submissão(e-mail, id, nota, texto, revisto)
+AK = e-mail, id
+FK = e-mail REF Revisor, id REF Autor
+
+Conferência_Submissão(nome, ano de realização, id, data limite)
+AK = nome, ano de realização, id
+FK = nome REF Conferência, ano de realização REF Conferência, id REF Submissão
+
+Autor_Submissão(e-mail, id)
+AK = e-mail, id
+FK = e-mail REF Autor, id REF Submissão
